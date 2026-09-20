@@ -7,6 +7,7 @@ from jev_sml import ActionId, FakeGamePort, GameSession
 from jev_sml.course import MarioState
 from jev_sml.domain import AirState, Ascending, Descending, Grounded
 from jev_sml.moves import legal_menu
+from jev_sml.session import HaltedBeat, PlayedBeat
 
 
 def test_grounded_and_descending_cannot_both_exist() -> None:
@@ -47,5 +48,36 @@ def test_cycle_does_not_call_policy_when_course_is_terminal() -> None:
         ("level_cleared", "level_cleared"),
     ):
         beat = GameSession(FakeGamePort.from_fixture(name), ForbiddenPolicy()).cycle()
+        assert isinstance(beat, HaltedBeat)
         assert beat.result.kind == kind
-        assert beat.decision is None
+
+
+def test_played_beat_cannot_omit_observation() -> None:
+    with pytest.raises(ValidationError):
+        PlayedBeat.model_validate(
+            {
+                "kind": "played",
+                "menu": ["right"],
+                "decision": {"action": "right"},
+                "result": {
+                    "kind": "advanced",
+                    "action": "right",
+                    "start_frame": 0,
+                    "end_frame": 16,
+                    "confidence": None,
+                },
+                "frames_per_decision": 16,
+            }
+        )
+
+
+def test_halted_beat_rejects_an_observation_field() -> None:
+    with pytest.raises(ValidationError):
+        HaltedBeat.model_validate(
+            {
+                "kind": "halted",
+                "observation": {"frame": 0},
+                "result": {"kind": "dead", "frame": 0},
+                "frames_per_decision": 16,
+            }
+        )
