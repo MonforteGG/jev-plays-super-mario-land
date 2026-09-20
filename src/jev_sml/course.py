@@ -33,7 +33,7 @@ JUMP_DESCENDING = 2
 JUMP_NONE = 0
 AREA_COLS = 20
 
-COMPRESSED_MARIO = frozenset({1, 2, 3, 4})
+COMPRESSED_MARIO = frozenset({1})
 COMPRESSED_SOLID = frozenset({10, 11, 12, 13, 14})
 COMPRESSED_ENEMY = {
     15: "goomba",

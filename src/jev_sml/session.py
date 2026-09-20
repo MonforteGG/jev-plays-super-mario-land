@@ -20,7 +20,6 @@ from jev_sml.moves import MOVES
 from jev_sml.ports import GamePort
 
 
-# Beat.observation is optional because a terminal CourseState has no Playing record to compact.
 class Beat(Value):
     observation: Observation | None
     menu: tuple[ActionId, ...]

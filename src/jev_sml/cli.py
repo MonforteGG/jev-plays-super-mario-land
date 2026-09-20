@@ -50,7 +50,7 @@ def main(argv: list[str] | None = None) -> int:
             telemetry=telemetry,
         ).run(max_decisions=args.max_decisions)
         print(json.dumps(outcome.model_dump(mode="json")))
-        return 0
+        return 0 if outcome.kind == "level_cleared" else 1
     finally:
         policy.close()
         telemetry.close()
