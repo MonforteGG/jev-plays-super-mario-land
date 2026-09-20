@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jev-sml"
+version = "0.1.0"
+description = "A structured-state Super Mario Land controller driven by TypeSafe Jev."
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "pydantic>=2.7,<3",
+]
+
+[project.optional-dependencies]
+runtime = [
+  "pyboy>=2.7,<3",
+  "typesafe-sdk>=0.7,<1",
+]
+dev = [
+  "pytest>=8,<9",
+  "ruff>=0.9,<1",
+  "mypy>=1.13,<2",
+]
+
+[project.scripts]
+jev-sml = "jev_sml.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["jev_sml"]
